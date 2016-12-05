@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C3DE00FE19F4CA0800924BF9"
-               BuildableName = "Roll and Jump Beta 1.app"
-               BlueprintName = "Roll and Jump Beta 1"
-               ReferencedContainer = "container:Roll and Jump Beta 1.xcodeproj">
+               BuildableName = "RollandJump.app"
+               BlueprintName = "RollandJump"
+               ReferencedContainer = "container:RollandJump.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "C3DE011719F4CA0800924BF9"
-               BuildableName = "Roll and Jump Beta 1Tests.xctest"
-               BlueprintName = "Roll and Jump Beta 1Tests"
-               ReferencedContainer = "container:Roll and Jump Beta 1.xcodeproj">
+               BuildableName = "RollandJump.xctest"
+               BlueprintName = "RollandJumpTests"
+               ReferencedContainer = "container:RollandJump.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -43,9 +43,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C3DE00FE19F4CA0800924BF9"
-            BuildableName = "Roll and Jump Beta 1.app"
-            BlueprintName = "Roll and Jump Beta 1"
-            ReferencedContainer = "container:Roll and Jump Beta 1.xcodeproj">
+            BuildableName = "RollandJump.app"
+            BlueprintName = "RollandJump"
+            ReferencedContainer = "container:RollandJump.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -66,9 +66,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C3DE00FE19F4CA0800924BF9"
-            BuildableName = "Roll and Jump Beta 1.app"
-            BlueprintName = "Roll and Jump Beta 1"
-            ReferencedContainer = "container:Roll and Jump Beta 1.xcodeproj">
+            BuildableName = "RollandJump.app"
+            BlueprintName = "RollandJump"
+            ReferencedContainer = "container:RollandJump.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -85,9 +85,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "C3DE00FE19F4CA0800924BF9"
-            BuildableName = "Roll and Jump Beta 1.app"
-            BlueprintName = "Roll and Jump Beta 1"
-            ReferencedContainer = "container:Roll and Jump Beta 1.xcodeproj">
+            BuildableName = "RollandJump.app"
+            BlueprintName = "RollandJump"
+            ReferencedContainer = "container:RollandJump.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
