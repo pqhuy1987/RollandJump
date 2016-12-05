@@ -12,7 +12,7 @@ import SpriteKit
 class GameScene: SKScene {
     
     //Create the Play button
-    let playButton = SKSpriteNode(imageNamed: "play")
+    let playButton = SKSpriteNode(imageNamed: "Play")
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
