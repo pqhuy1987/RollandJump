@@ -14,10 +14,10 @@ class GameScene: SKScene {
     //Create the Play button
     let playButton = SKSpriteNode(imageNamed: "Play")
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         /* Setup your scene here */
         //Center the play button in the frame and add it to the screen
-        self.playButton.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
+        self.playButton.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
         self.addChild(self.playButton)
         
         //set the background color
@@ -25,21 +25,21 @@ class GameScene: SKScene {
         
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         /* Called when a touch begins */
         for touch:AnyObject in touches {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
             //If the play button was pressed
-            if self.nodeAtPoint(location) == self.playButton {
+            if self.atPoint(location) == self.playButton {
                 print("Go to the game.")
                 
                 //Go to the game
-                var scene = PlayScene(size: self.size)
+                let scene = PlayScene(size: self.size)
                 let skView = self.view as SKView!
-                skView.ignoresSiblingOrder = true
-                scene.scaleMode = .ResizeFill
-                scene.size = skView.bounds.size
-                skView.presentScene(scene)
+                skView?.ignoresSiblingOrder = true
+                scene.scaleMode = .resizeFill
+                scene.size = (skView?.bounds.size)!
+                skView?.presentScene(scene)
             }
             
         }
@@ -47,7 +47,7 @@ class GameScene: SKScene {
         
     }
    
-    override func update(currentTime: CFTimeInterval) {
+    override func update(_ currentTime: TimeInterval) {
         /* Called before each frame is rendered */
     }
 }

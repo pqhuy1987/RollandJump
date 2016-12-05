@@ -7,6 +7,30 @@
 //
 //  This is where all the game play takes place
 import SpriteKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class PlayScene: SKScene, SKPhysicsContactDelegate {
     
@@ -33,19 +57,19 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     var lives = 3
     
     enum ColliderType:UInt32 {
-        case Hero = 1
-        case Block = 2
+        case hero = 1
+        case block = 2
     }
     
     //This function loads when the PlayScene view has been presented
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         print("didMoveToView - We are at the new scene.")
         self.backgroundColor = UIColor(hex:0x80D9ff)
         
         self.physicsWorld.contactDelegate = self
         
-        self.runningBar.anchorPoint = CGPointMake(0, 0.5)
-        self.runningBar.position = CGPointMake(CGRectGetMinX(self.frame), CGRectGetMinY(self.frame) + (self.runningBar.size.height / 2))
+        self.runningBar.anchorPoint = CGPoint(x: 0, y: 0.5)
+        self.runningBar.position = CGPoint(x: self.frame.minX, y: self.frame.minY + (self.runningBar.size.height / 2))
         
         
         self.origRunningBarPositionX = self.runningBar.position.x
@@ -53,31 +77,31 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         self.maxBarX *= -1
         
         self.heroBaseline = self.runningBar.position.y + (self.runningBar.size.height / 2) + (self.hero.size.height / 2)
-        self.hero.position = CGPointMake(CGRectGetMinX(self.frame) + self.hero.size.width + self.hero.size.width / 4, self.heroBaseline)
+        self.hero.position = CGPoint(x: self.frame.minX + self.hero.size.width + self.hero.size.width / 4, y: self.heroBaseline)
         self.hero.physicsBody = SKPhysicsBody(circleOfRadius: CGFloat(self.hero.size.width / 2))
         self.hero.physicsBody?.affectedByGravity = false
-        self.hero.physicsBody?.categoryBitMask = ColliderType.Hero.rawValue
-        self.hero.physicsBody?.contactTestBitMask = ColliderType.Block.rawValue
-        self.hero.physicsBody?.collisionBitMask = ColliderType.Block.rawValue
+        self.hero.physicsBody?.categoryBitMask = ColliderType.hero.rawValue
+        self.hero.physicsBody?.contactTestBitMask = ColliderType.block.rawValue
+        self.hero.physicsBody?.collisionBitMask = ColliderType.block.rawValue
         
         
-        self.block1.position = CGPointMake(CGRectGetMaxX(self.frame) + self.block1.size.width, self.heroBaseline)
-        self.block2.position = CGPointMake(CGRectGetMaxX(self.frame) + self.block2.size.width, self.heroBaseline + self.block1.size.height / 2)
-        self.block1.physicsBody = SKPhysicsBody(rectangleOfSize: self.block1.size)
-        self.block1.physicsBody?.dynamic = false
-        self.block1.physicsBody?.categoryBitMask = ColliderType.Block.rawValue
-        self.block1.physicsBody?.contactTestBitMask = ColliderType.Hero.rawValue
-        self.block1.physicsBody?.collisionBitMask = ColliderType.Hero.rawValue
+        self.block1.position = CGPoint(x: self.frame.maxX + self.block1.size.width, y: self.heroBaseline)
+        self.block2.position = CGPoint(x: self.frame.maxX + self.block2.size.width, y: self.heroBaseline + self.block1.size.height / 2)
+        self.block1.physicsBody = SKPhysicsBody(rectangleOf: self.block1.size)
+        self.block1.physicsBody?.isDynamic = false
+        self.block1.physicsBody?.categoryBitMask = ColliderType.block.rawValue
+        self.block1.physicsBody?.contactTestBitMask = ColliderType.hero.rawValue
+        self.block1.physicsBody?.collisionBitMask = ColliderType.hero.rawValue
         
-        self.block2.physicsBody = SKPhysicsBody(rectangleOfSize: self.block2.size)
-        self.block2.physicsBody?.dynamic = false
-        self.block2.physicsBody?.categoryBitMask = ColliderType.Block.rawValue
-        self.block2.physicsBody?.contactTestBitMask = ColliderType.Hero.rawValue
-        self.block2.physicsBody?.collisionBitMask = ColliderType.Hero.rawValue
+        self.block2.physicsBody = SKPhysicsBody(rectangleOf: self.block2.size)
+        self.block2.physicsBody?.isDynamic = false
+        self.block2.physicsBody?.categoryBitMask = ColliderType.block.rawValue
+        self.block2.physicsBody?.contactTestBitMask = ColliderType.hero.rawValue
+        self.block2.physicsBody?.collisionBitMask = ColliderType.hero.rawValue
         
-        self.fireball.position = CGPointMake(CGRectGetMaxX(self.frame) + self.fireball.size.width, CGRectGetMaxY(self.frame) - self.fireball.size.height)
-        self.fireball.physicsBody = SKPhysicsBody(rectangleOfSize: self.fireball.size)
-        self.fireball.physicsBody?.dynamic = false
+        self.fireball.position = CGPoint(x: self.frame.maxX + self.fireball.size.width, y: self.frame.maxY - self.fireball.size.height)
+        self.fireball.physicsBody = SKPhysicsBody(rectangleOf: self.fireball.size)
+        self.fireball.physicsBody?.isDynamic = false
         //self.fireball.physicsBody?.categoryBitMask = ColliderType.
         
         self.origBlockPositionX = self.block1.position.x
@@ -91,11 +115,11 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         
         self.scoreText.text = "0"
         self.scoreText.fontSize = 42
-        self.scoreText.position = CGPointMake(CGRectGetMidX(self.frame), CGRectGetMidY(self.frame))
+        self.scoreText.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
         
         self.livesText.text = "3" + " Lives"
         self.livesText.fontSize = 42
-        self.livesText.position = CGPointMake(CGRectGetMinX(self.frame) + (self.frame.size.width / 2), CGRectGetMinY(self.frame) + (self.runningBar.size.height/2))
+        self.livesText.position = CGPoint(x: self.frame.minX + (self.frame.size.width / 2), y: self.frame.minY + (self.runningBar.size.height/2))
         
         self.blockMaxX = 0 - self.block1.size.width / 2
         
@@ -108,8 +132,8 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(self.fireball)
     }
     
-    func didBeginContact(contact: SKPhysicsContact) {
-        self.lives--
+    func didBegin(_ contact: SKPhysicsContact) {
+        self.lives -= 1
         self.livesText.text = String(self.lives) + " Lives"
         if (self.lives <= 0) {
             died()
@@ -123,24 +147,24 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
             print("Go to the Game Over screen")
             
             //Go to the game
-            var scene = GameOverScene(size: self.size)
+            let scene = GameOverScene(size: self.size)
             let skView = self.view as SKView!
-            skView.ignoresSiblingOrder = true
-            scene.scaleMode = .ResizeFill
-            scene.size = skView.bounds.size
-            skView.presentScene(scene)
+            skView?.ignoresSiblingOrder = true
+            scene.scaleMode = .resizeFill
+            scene.size = (skView?.bounds.size)!
+            skView?.presentScene(scene)
     }
     
     
     func random() -> UInt32 {
-        var range = UInt32(50)..<UInt32(200)
-        return range.startIndex + arc4random_uniform(range.endIndex - range.startIndex + 1)
+        let range = UInt32(50)..<UInt32(200)
+        return range.lowerBound + arc4random_uniform(range.upperBound - range.lowerBound + 1)
     }
     
     var blockStatuses:Dictionary<String, BlockStatus> = [:]
     
     //override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 
         if self.onGround {
             self.velocityY = -18
@@ -149,7 +173,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     //override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
 
         if self.velocityY < -9.0 {
             self.velocityY = -9.0
@@ -157,7 +181,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     }
     
     //This function runs on every single screen update
-    override func update(currentTime: NSTimeInterval) {
+    override func update(_ currentTime: TimeInterval) {
         if self.runningBar.position.x <= maxBarX {
             self.runningBar.position.x = self.origRunningBarPositionX
         }
@@ -178,7 +202,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
         }
         
         //rotate the hero
-        var degreeRotation = CDouble(self.groundSpeed) * M_PI / 180
+        let degreeRotation = CDouble(self.groundSpeed) * M_PI / 180
         
         //rotate the hero
         self.hero.zRotation -= CGFloat(degreeRotation)
@@ -192,7 +216,7 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
     
     func blockRunner() {
         for (block, blockStatus) in self.blockStatuses {
-            var thisBlock = self.childNodeWithName(block)
+            let thisBlock = self.childNode(withName: block)
             if blockStatus.shouldRunBlock() {
                 blockStatus.timeGapForNextRun = random()
                 blockStatus.currentInterval = 0
@@ -205,14 +229,14 @@ class PlayScene: SKScene, SKPhysicsContactDelegate {
                 } else {
                     thisBlock?.position.x = self.origBlockPositionX
                     blockStatus.isRunning = false
-                    self.score++
+                    self.score += 1
                     if ((self.score % 5) == 0) {
-                        self.groundSpeed++
+                        self.groundSpeed += 1
                     }
                     self.scoreText.text = String(self.score)
                 }
             }else {
-                blockStatus.currentInterval++
+                blockStatus.currentInterval += 1
             }
         }
     }
